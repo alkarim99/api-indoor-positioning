@@ -7,7 +7,7 @@ const helmet = require("helmet")
 const xss = require("xss-clean")
 const cors = require("cors")
 
-// const candidateRoutes = require("./routes/candidate.routes")
+const fingerprintRoutes = require("./routes/fingerprint.routes")
 
 const port = 3000
 
@@ -21,7 +21,7 @@ app.use(helmet())
 app.use(xss())
 app.use(cors())
 
-// app.use(candidateRoutes)
+app.use(fingerprintRoutes)
 
 app.get("/", (req, res) => {
   res.send("API For Indoor Positioning App!")
