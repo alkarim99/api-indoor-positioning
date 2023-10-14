@@ -9,7 +9,7 @@ const cors = require("cors")
 
 const fingerprintRoutes = require("./routes/fingerprint.routes")
 
-const port = 3000
+const port = 3100
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }))
