@@ -22,6 +22,17 @@ const getById = async (id) => {
   }
 }
 
+const getByLantai = async (id) => {
+  try {
+    const result = await db.query(
+      `SELECT * FROM tb_fingerprint WHERE lantai like '%${id}%'`
+    )
+    return result
+  } catch (error) {
+    return error
+  }
+}
+
 const create = async (fingerprint) => {
   try {
     const { name, lantai, coord_x, coord_y, rss, created_at, updated_at } =
@@ -73,6 +84,7 @@ const deleteFingerprint = async (id) => {
 module.exports = {
   get,
   getById,
+  getByLantai,
   create,
   update,
   deleteFingerprint,

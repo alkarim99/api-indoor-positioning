@@ -70,8 +70,37 @@ const getById = async (req, res) => {
   }
 }
 
+const getByLantai = async (req, res) => {
+  try {
+    const id = req.params.id
+    if (isNaN(id)) {
+      res.status(400).json({
+        status: false,
+        message: "ID must be integer",
+      })
+      return
+    }
+    const result = await model.getByLantai(id)
+    if (!result?.length) {
+      res.status(404).json({
+        status: false,
+        message: `ID ${id} not found!`,
+      })
+    }
+    res.json({
+      status: true,
+      result,
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({
+      status: false,
+      message: "Error in server",
+    })
+  }
+}
+
 const create = async (req, res) => {
-  console.log(req)
   try {
     const { name, lantai, coord_x, coord_y, rss } = req.body
     if (!(name && lantai && coord_x && coord_y && rss)) {
@@ -172,6 +201,7 @@ const deleteFingerprint = async (req, res) => {
 module.exports = {
   get,
   getById,
+  getByLantai,
   create,
   update,
   deleteFingerprint,
