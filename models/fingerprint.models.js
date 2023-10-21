@@ -1,8 +1,9 @@
 const db = require("../database")
+const table = "tb_fingerprint"
 
 const get = async () => {
   try {
-    const result = await db.query(`SELECT * FROM tb_fingerprint`)
+    const result = await db.query(`SELECT * FROM ${table}`)
     return { result }
   } catch (error) {
     return error
@@ -12,7 +13,7 @@ const get = async () => {
 const getById = async (id) => {
   try {
     const result = await db.query(
-      `SELECT * FROM tb_fingerprint WHERE fingerprint_id=${id}`
+      `SELECT * FROM ${table} WHERE fingerprint_id=${id}`
     )
     return result
   } catch (error) {
@@ -22,9 +23,7 @@ const getById = async (id) => {
 
 const getByLantai = async (id) => {
   try {
-    const result = await db.query(
-      `SELECT * FROM tb_fingerprint WHERE lantai like '%${id}%'`
-    )
+    const result = await db.query(`SELECT * FROM ${table} WHERE lantai=${id}`)
     return result
   } catch (error) {
     return error
@@ -36,7 +35,7 @@ const create = async (fingerprint) => {
     const { name, lantai, coord_x, coord_y, rss, created_at, updated_at } =
       fingerprint
     const result = await db.query(
-      `INSERT INTO tb_fingerprint (name, lantai, coord_x, coord_y, rss, created_at, updated_at) VALUES ('${name}', '${lantai}', '${coord_x}', '${coord_y}', '${rss}', '${created_at}', '${updated_at}');`
+      `INSERT INTO ${table} (name, lantai, coord_x, coord_y, rss, created_at, updated_at) VALUES ('${name}', '${lantai}', '${coord_x}', '${coord_y}', '${rss}', '${created_at}', '${updated_at}');`
     )
     let message = "Error in creating fingerprint"
     if (result.affectedRows) {
@@ -52,7 +51,7 @@ const update = async (fingerprint, id) => {
   try {
     const { name, lantai, coord_x, coord_y, rss, updated_at } = fingerprint
     const result = await db.query(
-      `UPDATE tb_fingerprint SET name='${name}', lantai='${lantai}', coord_x='${coord_x}', coord_y='${coord_y}', rss='${rss}', updated_at='${updated_at}' WHERE fingerprint_id='${id}'`
+      `UPDATE ${table} SET name='${name}', lantai='${lantai}', coord_x='${coord_x}', coord_y='${coord_y}', rss='${rss}', updated_at='${updated_at}' WHERE fingerprint_id='${id}'`
     )
     let message = "Error in updating fingerprint"
     if (result.affectedRows) {
@@ -67,7 +66,7 @@ const update = async (fingerprint, id) => {
 const deleteFingerprint = async (id) => {
   try {
     const result = await db.query(
-      `DELETE FROM tb_fingerprint WHERE fingerprint_id='${id}'`
+      `DELETE FROM ${table} WHERE fingerprint_id='${id}'`
     )
     let message = "Error in deleting fingerprint"
     if (result.affectedRows) {
