@@ -10,7 +10,7 @@ const cors = require("cors")
 const fingerprintRoutes = require("./routes/fingerprint.routes")
 const locationRoutes = require("./routes/location.routes")
 const weightRoutes = require("./routes/weight.routes")
-const routeRoutes = require("./routes/route.routes")
+const navigationRoutes = require("./routes/navigation.routes")
 
 const port = 3100
 
@@ -26,7 +26,7 @@ app.use(cors())
 
 app.use(fingerprintRoutes)
 app.use(locationRoutes)
-app.use(routeRoutes)
+app.use(navigationRoutes)
 app.use(weightRoutes)
 
 app.get("/", (req, res) => {

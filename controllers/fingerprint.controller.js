@@ -50,19 +50,19 @@ const getById = async (req, res) => {
 
 const getByLantai = async (req, res) => {
   try {
-    const id = req.params.id
-    if (isNaN(id)) {
+    const lantai = req.params.lantai
+    if (isNaN(lantai)) {
       res.status(400).json({
         status: false,
-        message: "ID must be integer",
+        message: "Lantai must be integer",
       })
       return
     }
-    const result = await model.getByLantai(id)
+    const result = await model.getByLantai(lantai)
     if (!result?.length) {
       res.status(404).json({
         status: false,
-        message: `ID ${id} not found!`,
+        message: `Lantai ${lantai} not found!`,
       })
     }
     res.json({

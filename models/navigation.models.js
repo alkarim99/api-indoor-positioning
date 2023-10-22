@@ -1,5 +1,5 @@
 const db = require("../database")
-const table = "tb_route"
+const table = "tb_navigation"
 
 const get = async () => {
   try {
@@ -12,14 +12,27 @@ const get = async () => {
 
 const getById = async (id) => {
   try {
-    const result = await db.query(`SELECT * FROM ${table} WHERE route_id=${id}`)
+    const result = await db.query(
+      `SELECT * FROM ${table} WHERE navigation_id=${id}`
+    )
     return result
   } catch (error) {
     return error
   }
 }
 
-const getRoute = async (data) => {
+const getByLantai = async (lantai) => {
+  try {
+    const result = await db.query(
+      `SELECT * FROM ${table} WHERE lantai=${lantai}`
+    )
+    return result
+  } catch (error) {
+    return error
+  }
+}
+
+const getNavigation = async (data) => {
   try {
     const { from, to, lantai } = data
     const result = await db.query(
@@ -37,9 +50,9 @@ const create = async (data) => {
     const result = await db.query(
       `INSERT INTO ${table} (start, end, route, lantai, created_at, updated_at) VALUES ('${start}', '${end}', '${route}', '${lantai}', '${created_at}', '${updated_at}');`
     )
-    let message = "Error in creating route"
+    let message = "Error in creating navigation"
     if (result.affectedRows) {
-      message = "Route created successfully"
+      message = "Navigation created successfully"
     }
     return { message }
   } catch (error) {
@@ -51,11 +64,11 @@ const update = async (data, id) => {
   try {
     const { start, end, route, lantai, updated_at } = data
     const result = await db.query(
-      `UPDATE ${table} SET start='${start}', end='${end}', route='${route}', lantai='${lantai}', updated_at='${updated_at}' WHERE route_id='${id}'`
+      `UPDATE ${table} SET start='${start}', end='${end}', route='${route}', lantai='${lantai}', updated_at='${updated_at}' WHERE navigation_id='${id}'`
     )
-    let message = "Error in updating route"
+    let message = "Error in updating navigation"
     if (result.affectedRows) {
-      message = "Route updated successfully"
+      message = "Navigation updated successfully"
     }
     return { message }
   } catch (error) {
@@ -63,12 +76,14 @@ const update = async (data, id) => {
   }
 }
 
-const deleteRoute = async (id) => {
+const deleteNavigation = async (id) => {
   try {
-    const result = await db.query(`DELETE FROM ${table} WHERE route_id='${id}'`)
-    let message = "Error in deleting route"
+    const result = await db.query(
+      `DELETE FROM ${table} WHERE navigation_id='${id}'`
+    )
+    let message = "Error in deleting navigation"
     if (result.affectedRows) {
-      message = "Route deleted successfully"
+      message = "Navigation deleted successfully"
     }
     return { message }
   } catch (error) {
@@ -79,8 +94,9 @@ const deleteRoute = async (id) => {
 module.exports = {
   get,
   getById,
-  getRoute,
+  getByLantai,
+  getNavigation,
   create,
   update,
-  deleteRoute,
+  deleteNavigation,
 }

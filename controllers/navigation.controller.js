@@ -1,4 +1,4 @@
-const model = require("../models/route.models")
+const model = require("../models/navigation.models")
 const { create_date, update_date } = require("../helpers/datetime")
 
 const get = async (req, res) => {
@@ -48,7 +48,37 @@ const getById = async (req, res) => {
   }
 }
 
-const getRoute = async (req, res) => {
+const getByLantai = async (req, res) => {
+  try {
+    const lantai = req.params.lantai
+    if (isNaN(lantai)) {
+      res.status(400).json({
+        status: false,
+        message: "Lantai must be integer",
+      })
+      return
+    }
+    const result = await model.getByLantai(lantai)
+    if (!result?.length) {
+      res.status(404).json({
+        status: false,
+        message: `Lantai ${lantai} not found!`,
+      })
+    }
+    res.json({
+      status: true,
+      result,
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({
+      status: false,
+      message: "Error in server",
+    })
+  }
+}
+
+const getNavigation = async (req, res) => {
   try {
     const { start, end, lantai } = req.body
     if (!(start && end && lantai)) {
@@ -58,7 +88,7 @@ const getRoute = async (req, res) => {
       })
       return
     }
-    const result = await model.getRoute(req.body)
+    const result = await model.getNavigation(req.body)
     if (!result?.length) {
       res.status(404).json({
         status: false,
@@ -145,7 +175,7 @@ const update = async (req, res) => {
   }
 }
 
-const deleteRoute = async (req, res) => {
+const deleteNavigation = async (req, res) => {
   try {
     const id = req.params.id
     if (isNaN(id)) {
@@ -162,7 +192,7 @@ const deleteRoute = async (req, res) => {
         message: `ID ${id} not found!`,
       })
     }
-    const { message } = await model.deleteRoute(id)
+    const { message } = await model.deleteNavigation(id)
     res.json({
       status: true,
       message,
@@ -179,8 +209,9 @@ const deleteRoute = async (req, res) => {
 module.exports = {
   get,
   getById,
-  getRoute,
+  getByLantai,
+  getNavigation,
   create,
   update,
-  deleteRoute,
+  deleteNavigation,
 }

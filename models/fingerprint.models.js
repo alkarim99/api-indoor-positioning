@@ -21,9 +21,11 @@ const getById = async (id) => {
   }
 }
 
-const getByLantai = async (id) => {
+const getByLantai = async (lantai) => {
   try {
-    const result = await db.query(`SELECT * FROM ${table} WHERE lantai=${id}`)
+    const result = await db.query(
+      `SELECT * FROM ${table} WHERE lantai=${lantai}`
+    )
     return result
   } catch (error) {
     return error
