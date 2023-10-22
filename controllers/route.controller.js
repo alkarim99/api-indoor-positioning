@@ -1,4 +1,4 @@
-const model = require("../models/fingerprint.models")
+const model = require("../models/route.models")
 const { create_date, update_date } = require("../helpers/datetime")
 
 const get = async (req, res) => {
@@ -48,21 +48,21 @@ const getById = async (req, res) => {
   }
 }
 
-const getByLantai = async (req, res) => {
+const getRoute = async (req, res) => {
   try {
-    const id = req.params.id
-    if (isNaN(id)) {
+    const { start, end, lantai } = req.body
+    if (!(start && end && lantai)) {
       res.status(400).json({
         status: false,
-        message: "ID must be integer",
+        message: "Bad input, please complete all of fields",
       })
       return
     }
-    const result = await model.getByLantai(id)
+    const result = await model.getRoute(req.body)
     if (!result?.length) {
       res.status(404).json({
         status: false,
-        message: `ID ${id} not found!`,
+        message: `Data not found!`,
       })
     }
     res.json({
@@ -80,8 +80,8 @@ const getByLantai = async (req, res) => {
 
 const create = async (req, res) => {
   try {
-    const { name, lantai, coord_x, coord_y, rss } = req.body
-    if (!(name && lantai && coord_x && coord_y && rss)) {
+    const { start, end, route, lantai } = req.body
+    if (!(start && end && lantai && route)) {
       res.status(400).json({
         status: false,
         message: "Bad input, please complete all of fields",
@@ -93,6 +93,7 @@ const create = async (req, res) => {
     const { message } = await model.create(data)
     res.json({
       status: true,
+      // data,
       message,
     })
   } catch (error) {
@@ -107,7 +108,7 @@ const create = async (req, res) => {
 const update = async (req, res) => {
   try {
     const id = req.params.id
-    const { name, lantai, coord_x, coord_y, rss } = req.body
+    const { start, end, route, lantai } = req.body
     if (isNaN(id)) {
       res.status(400).json({
         status: false,
@@ -124,11 +125,10 @@ const update = async (req, res) => {
     }
     const { updated_at } = update_date()
     const payload = {
-      name: name ?? checkData[0].name,
+      start: start ?? checkData[0].start,
+      end: end ?? checkData[0].end,
       lantai: lantai ?? checkData[0].lantai,
-      coord_x: coord_x ?? checkData[0].coord_x,
-      coord_y: coord_y ?? checkData[0].coord_y,
-      rss: rss ?? checkData[0].rss,
+      route: route ?? checkData[0].route,
       updated_at,
     }
     const { message } = await model.update(payload, id)
@@ -145,7 +145,7 @@ const update = async (req, res) => {
   }
 }
 
-const deleteFingerprint = async (req, res) => {
+const deleteRoute = async (req, res) => {
   try {
     const id = req.params.id
     if (isNaN(id)) {
@@ -162,7 +162,7 @@ const deleteFingerprint = async (req, res) => {
         message: `ID ${id} not found!`,
       })
     }
-    const { message } = await model.deleteFingerprint(id)
+    const { message } = await model.deleteRoute(id)
     res.json({
       status: true,
       message,
@@ -179,8 +179,8 @@ const deleteFingerprint = async (req, res) => {
 module.exports = {
   get,
   getById,
-  getByLantai,
+  getRoute,
   create,
   update,
-  deleteFingerprint,
+  deleteRoute,
 }
