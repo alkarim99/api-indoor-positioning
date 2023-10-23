@@ -49,7 +49,7 @@ const find = async (req, res) => {
     })
     const wkNNSorted = Object.keys(wkNNResult).sort()
     const wkNNLocation = wkNNSorted[wkNNSorted.length - 1]
-    const wkNNdistance = wkNNResult[wkNNSorted[kNNSorted.length - 1]]
+    const wkNNdistance = wkNNResult[wkNNSorted[wkNNSorted.length - 1]]
 
     res.json({
       status: true,
