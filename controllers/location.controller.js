@@ -30,9 +30,12 @@ const find = async (req, res) => {
       total = Math.sqrt(total)
       kNNResult[name] = total
     })
-    const kNNSorted = Object.keys(kNNResult).sort()
-    const kNNLocation = kNNSorted[kNNSorted.length - 1]
-    const kNNdistance = kNNResult[kNNSorted[kNNSorted.length - 1]]
+    const kNNSorted = Object.entries(kNNResult)
+      .sort(([, a], [, b]) => a - b)
+      .reduce((r, [k, v]) => ({ ...r, [k]: v }), {})
+    const kNNLocation =
+      Object.keys(kNNSorted)[Object.keys(kNNSorted).length - 1]
+    const kNNdistance = kNNResult[kNNLocation]
 
     const wkNNResult = {}
     fingerprint.map((data, key) => {
@@ -47,9 +50,12 @@ const find = async (req, res) => {
       total = Math.sqrt(total)
       wkNNResult[name] = total
     })
-    const wkNNSorted = Object.keys(wkNNResult).sort()
-    const wkNNLocation = wkNNSorted[wkNNSorted.length - 1]
-    const wkNNdistance = wkNNResult[wkNNSorted[wkNNSorted.length - 1]]
+    const wkNNSorted = Object.entries(wkNNResult)
+      .sort(([, a], [, b]) => a - b)
+      .reduce((r, [k, v]) => ({ ...r, [k]: v }), {})
+    const wkNNLocation =
+      Object.keys(wkNNSorted)[Object.keys(wkNNSorted).length - 1]
+    const wkNNdistance = wkNNResult[wkNNLocation]
 
     res.json({
       status: true,
