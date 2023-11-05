@@ -11,6 +11,8 @@ const fingerprintRoutes = require("./routes/fingerprint.routes")
 const locationRoutes = require("./routes/location.routes")
 const weightRoutes = require("./routes/weight.routes")
 const navigationRoutes = require("./routes/navigation.routes")
+const usersRoutes = require("./routes/users.routes")
+const authRoutes = require("./routes/auth.routes")
 
 const port = 3100
 
@@ -28,6 +30,8 @@ app.use(fingerprintRoutes)
 app.use(locationRoutes)
 app.use(navigationRoutes)
 app.use(weightRoutes)
+app.use(usersRoutes)
+app.use(authRoutes)
 
 app.get("/", (req, res) => {
   res.send("API For Indoor Positioning App!")
