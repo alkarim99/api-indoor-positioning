@@ -13,7 +13,7 @@ const isEmailUnique = async (email, id) => {
   try {
     let emails
     if (id) {
-      emails = await db.query(`SELECT * FROM tb_user WHERE user_id=${id}`)
+      emails = await db.query(`SELECT * FROM tb_user WHERE user_id != ${id}`)
     } else {
       emails = await db.query(`SELECT * FROM tb_user`)
     }

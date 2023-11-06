@@ -20,7 +20,7 @@ const get = async (req, res) => {
     jwt.verify(
       getToken(req),
       process.env.JWT_PRIVATE_KEY,
-      async (err, { id, role }) => {
+      async (err, { user_id, role }) => {
         if (role == "admin") {
           const { result } = await model.get()
           res.send({
@@ -29,11 +29,11 @@ const get = async (req, res) => {
             result,
           })
         } else {
-          const { result } = await model.getById(id)
+          const { result } = await model.getById(user_id)
           if (!query?.length) {
             res.json({
               status: false,
-              message: `ID ${id} not found!`,
+              message: `ID ${user_id} not found!`,
             })
           }
           res.json({
@@ -187,7 +187,7 @@ const update = async (req, res) => {
     jwt.verify(
       getToken(req),
       process.env.JWT_PRIVATE_KEY,
-      async (err, { id, role }) => {
+      async (err, { user_id, role }) => {
         const {
           body: { email, fullname, password },
         } = req
@@ -204,12 +204,12 @@ const update = async (req, res) => {
           }
           checkData = await model.getById(idUser)
         } else {
-          checkData = await model.getById(id)
+          checkData = await model.getById(user_id)
         }
         const { updated_at } = update_date()
         const payload = {
           email: email ?? checkData[0].email,
-          full_name: fullname ?? checkData[0].full_name,
+          fullname: fullname ?? checkData[0].full_name,
           password: password ?? checkData[0].password,
           role: roleUser ?? checkData[0].role,
           updated_at,
@@ -226,7 +226,7 @@ const update = async (req, res) => {
         }
         const isEmailUnique = await emailValidation.isEmailUnique(
           payload.email,
-          checkData[0].id
+          checkData[0].user_id
         )
         if (isEmailUnique) {
           res.status(400).json({
@@ -235,7 +235,7 @@ const update = async (req, res) => {
           })
           return
         }
-        if (payload.full_name.length < 3) {
+        if (payload.fullname.length < 3) {
           res.status(400).json({
             status: false,
             message: "Fullname is invalid! Must be greater than or equal to 3",
@@ -260,7 +260,10 @@ const update = async (req, res) => {
           bcrypt.genSalt(saltRounds, function (err, salt) {
             bcrypt.hash(password, salt, async function (err, hash) {
               payload.password = hash
-              const { message } = await model.update(payload, checkData[0].id)
+              const { message } = await model.update(
+                payload,
+                checkData[0].user_id
+              )
               res.send({
                 status: true,
                 message,
@@ -268,7 +271,7 @@ const update = async (req, res) => {
             })
           })
         } else {
-          const { message } = await model.update(payload, checkData[0].id)
+          const { message } = await model.update(payload, checkData[0].user_id)
           res.send({
             status: true,
             message,
@@ -290,16 +293,16 @@ const deleteUser = async (req, res) => {
     jwt.verify(
       getToken(req),
       process.env.JWT_PRIVATE_KEY,
-      async (err, { id }) => {
-        const checkData = await model.getById(id)
+      async (err, { user_id }) => {
+        const checkData = await model.getById(user_id)
         if (!checkData?.length) {
           res.status(404).json({
             status: false,
-            message: `ID ${id} not found`,
+            message: `ID ${user_id} not found`,
           })
           return
         }
-        const { message } = await model.deleteUser(id)
+        const { message } = await model.deleteUser(user_id)
         res.send({
           status: true,
           message,

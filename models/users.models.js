@@ -12,9 +12,7 @@ const get = async () => {
 
 const getById = async (id) => {
   try {
-    const result = await db.query(
-      `SELECT * FROM ${table} WHERE weight_id=${id}`
-    )
+    const result = await db.query(`SELECT * FROM ${table} WHERE user_id=${id}`)
     return result
   } catch (error) {
     return error
@@ -24,7 +22,7 @@ const getById = async (id) => {
 const getByEmail = async (email) => {
   try {
     const result = await db.query(
-      `SELECT * FROM ${table} WHERE LOWER(email) = LOWER(${email})`
+      `SELECT * FROM ${table} WHERE LOWER(email) = LOWER('${email}')`
     )
     return result
   } catch (error) {
@@ -50,9 +48,9 @@ const create = async (data) => {
 
 const update = async (data, id) => {
   try {
-    const { full_name, email, password, role, updated_at } = data
+    const { fullname, email, password, role, updated_at } = data
     const result = await db.query(
-      `UPDATE ${table} SET full_name='${full_name}', email='${email}', password='${password}', role='${role}', updated_at='${updated_at}' WHERE user_id='${id}'`
+      `UPDATE ${table} SET full_name='${fullname}', email='${email}', password='${password}', role='${role}', updated_at='${updated_at}' WHERE user_id='${id}'`
     )
     let message = "Error in updating user"
     if (result.affectedRows) {
