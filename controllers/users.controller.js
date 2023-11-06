@@ -2,7 +2,6 @@ const emailValidation = require("../email.validation")
 const bcrypt = require("bcrypt")
 const saltRounds = 10
 const model = require("../models/users.models")
-const db = require("../database")
 const jwt = require("jsonwebtoken")
 const { create_date, update_date } = require("../helpers/datetime")
 
