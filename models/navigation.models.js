@@ -34,9 +34,9 @@ const getByLantai = async (lantai) => {
 
 const getNavigation = async (data) => {
   try {
-    const { from, to, lantai } = data
+    const { start, end, lantai } = data
     const result = await db.query(
-      `SELECT * FROM ${table} WHERE start=${from} and end=${to} and lantai=${lantai}`
+      `SELECT * FROM ${table} a WHERE a.start='${start}' and a.end='${end}' and a.lantai=${lantai}`
     )
     return result
   } catch (error) {
