@@ -28,8 +28,8 @@ const get = async (req, res) => {
             result,
           })
         } else {
-          const { result } = await model.getById(user_id)
-          if (!query?.length) {
+          const result = await model.getById(user_id)
+          if (!result?.length) {
             res.json({
               status: false,
               message: `ID ${user_id} not found!`,
