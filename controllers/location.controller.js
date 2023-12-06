@@ -24,7 +24,7 @@ const find = async (req, res) => {
       inputRss = rss.split(",")
       let total = 0
       inputRss.map((rss, index) => {
-        let count = rss - Math.abs(dataRss[index])
+        let count = Math.abs(rss - dataRss[index])
         total = total + Math.pow(count, 2)
       })
       total = Math.sqrt(total)
@@ -44,7 +44,7 @@ const find = async (req, res) => {
       inputRss = rss.split(",")
       let total = 0
       inputRss.map((rss, index) => {
-        let count = dataWeight[index] * (rss - Math.abs(dataRss[index]))
+        let count = dataWeight[index] * Math.abs(rss - dataRss[index])
         total = total + Math.pow(count, 2)
       })
       total = Math.sqrt(total)
