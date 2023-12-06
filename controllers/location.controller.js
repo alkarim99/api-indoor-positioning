@@ -27,7 +27,7 @@ const find = async (req, res) => {
         let count = Math.abs(rss - dataRss[index])
         total = total + Math.pow(count, 2)
       })
-      total = Math.sqrt(total)
+      // total = Math.sqrt(total)
       kNNResult[name] = total
     })
     const kNNSorted = Object.entries(kNNResult)
@@ -47,7 +47,7 @@ const find = async (req, res) => {
         let count = dataWeight[index] * Math.abs(rss - dataRss[index])
         total = total + Math.pow(count, 2)
       })
-      total = Math.sqrt(total)
+      // total = Math.sqrt(total)
       wkNNResult[name] = total
     })
     const wkNNSorted = Object.entries(wkNNResult)
@@ -57,11 +57,33 @@ const find = async (req, res) => {
       Object.keys(wkNNSorted)[Object.keys(wkNNSorted).length - 1]
     const wkNNdistance = wkNNResult[wkNNLocation]
 
+    const qWkNNResult = {}
+    fingerprint.map((data, key) => {
+      const name = data.name
+      dataRss = data.rss.split(",")
+      let total = 0
+      inputRss.map((rss, index) => {
+        let count =
+          dataWeight[index] *
+          Math.abs((10 ^ 0.1) * rss - (10 ^ 0.1) * dataRss[index])
+        total = total + Math.pow(count, 2)
+      })
+      // total = Math.sqrt(total)
+      qWkNNResult[name] = total
+    })
+    const qWkNNSorted = Object.entries(qWkNNResult)
+      .sort(([, a], [, b]) => a - b)
+      .reduce((r, [k, v]) => ({ ...r, [k]: v }), {})
+    const qWkNNLocation =
+      Object.keys(qWkNNSorted)[Object.keys(qWkNNSorted).length - 1]
+    const qWkNNdistance = qWkNNResult[qWkNNLocation]
+
     res.json({
       status: true,
       result: {
         kNN: { kNNLocation, kNNdistance },
         wkNN: { wkNNLocation, wkNNdistance },
+        qWkNN: { qWkNNLocation, qWkNNdistance },
       },
     })
   } catch (error) {
