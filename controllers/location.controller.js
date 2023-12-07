@@ -57,6 +57,7 @@ const find = async (req, res) => {
       Object.keys(wkNNSorted)[Object.keys(wkNNSorted).length - 1]
     const wkNNdistance = wkNNResult[wkNNLocation]
 
+    const basedQ = 1 / (10 * 2)
     const qWkNNResult = {}
     fingerprint.map((data, key) => {
       const name = data.name
@@ -65,12 +66,13 @@ const find = async (req, res) => {
       inputRss.map((rss, index) => {
         let count =
           dataWeight[index] *
-          Math.abs((10 ^ 0.1) * rss - (10 ^ 0.1) * dataRss[index])
+          Math.abs((10 ^ basedQ) * rss - (10 ^ basedQ) * dataRss[index])
         total = total + Math.pow(count, 2)
       })
       // total = Math.sqrt(total)
       qWkNNResult[name] = total
     })
+    console.log(qWkNNResult)
     const qWkNNSorted = Object.entries(qWkNNResult)
       .sort(([, a], [, b]) => a - b)
       .reduce((r, [k, v]) => ({ ...r, [k]: v }), {})
