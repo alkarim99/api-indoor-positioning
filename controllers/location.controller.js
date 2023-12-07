@@ -72,7 +72,7 @@ const find = async (req, res) => {
       // total = Math.sqrt(total)
       qWkNNResult[name] = total
     })
-    console.log(qWkNNResult)
+
     const qWkNNSorted = Object.entries(qWkNNResult)
       .sort(([, a], [, b]) => a - b)
       .reduce((r, [k, v]) => ({ ...r, [k]: v }), {})
