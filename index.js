@@ -14,7 +14,7 @@ const navigationRoutes = require("./routes/navigation.routes")
 const usersRoutes = require("./routes/users.routes")
 const authRoutes = require("./routes/auth.routes")
 
-const port = 3100
+const port = 8000
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
